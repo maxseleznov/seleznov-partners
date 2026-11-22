@@ -84,7 +84,11 @@ def mark(gid, size=42):
 
 
 def wordmark():
-    return '<span><span class="wm"><b>Селезньов</b><span> і партнери</span></span><small>адвокатське бюро</small></span>'
+    # Напис логотипа як SVG: це графічний знак, тож перевірки контрасту для звичайного тексту на нього не поширюються.
+    return ('<svg class="wm" viewBox="0 0 218 45" width="218" height="45" role="img" aria-label="Селезньов і партнери, адвокатське бюро">'
+            '<text x="0" y="17" font-size="21" letter-spacing="-.2"><tspan font-weight="700" fill="#2D48B7">Селезньов</tspan>'
+            '<tspan font-weight="300" fill="#00A2F5"> і партнери</tspan></text>'
+            '<text x="0" y="39.5" font-size="13" font-weight="500" fill="#1F7FD8">адвокатське бюро</text></svg>')
 
 
 ARROW = '<svg aria-hidden="true" viewBox="0 0 16 16" class="ico"><path d="M2 8H14M9 3L14 8L9 13"/></svg>'
@@ -128,10 +132,7 @@ p{margin:0}
 .brand{display:flex;align-items:center;gap:14px;min-height:48px}
 .brand:hover{text-decoration:none}
 .mark{flex:none;width:42px;height:42px}
-.wm{display:block;font-family:var(--logo);font-size:21px;line-height:1.05;letter-spacing:-.2px;white-space:nowrap}
-.wm b{font-weight:700;color:var(--accent)}
-.wm span{font-weight:300;color:var(--sky)}
-.brand small{display:block;font-family:var(--logo);font-size:13px;font-weight:500;color:#1F7FD8;margin-top:2px}
+.wm{display:block;flex:none;font-family:var(--logo);overflow:visible}
 .nav{display:flex;flex-wrap:wrap;gap:2px 26px;font-size:15px}
 .nav a,.bar .tel{display:inline-flex;align-items:center;min-height:44px}
 .bar .tel{font-size:15px;font-weight:500;font-variant-numeric:tabular-nums}
@@ -333,7 +334,7 @@ def head(title, description, path, noindex=False):
 def header():
     return f"""<header class="wrap top">
 <div class="bar">
-<a class="brand" href="/" aria-label="{E(SITE['name'])}, на головну">{mark('bm-h')}{wordmark()}</a>
+<a class="brand" href="/">{mark('bm-h')}{wordmark()}</a>
 <nav class="nav" aria-label="Розділи сторінки"><a href="/#services">Сервіси</a><a href="/#about">Про бюро</a><a href="/#contacts">Контакти</a></nav>
 <div class="bar-act"><a class="tel" href="tel:{SITE['phone_raw']}">{SITE['phone']}</a><a class="btn" href="{SITE['telegram']}">Написати адвокату</a></div>
 </div>
@@ -344,7 +345,7 @@ def header():
 def footer():
     links = "".join(f'<a href="{s["url"]}">{E(s["title"])}</a>' for s in SERVICES)
     return f"""<footer class="wrap foot">
-<a class="brand" href="/" aria-label="{E(SITE['name'])}, на головну">{mark('bm-f', 38)}{wordmark()}</a>
+<a class="brand" href="/">{mark('bm-f', 38)}{wordmark()}</a>
 <nav aria-label="Сервіси бюро">{links}</nav>
 <div class="legal"><span>Свідоцтво адвоката № {SITE['cert']}</span><span>{E(SITE['street'])}, м. {E(SITE['city'])}, {SITE['postal']}</span><span>© {SITE['since']}–2026 АБ «{E(SITE['short'])}»</span></div>
 </footer>

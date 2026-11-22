@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://seleznov-partners.com.ua/sitemap.xml

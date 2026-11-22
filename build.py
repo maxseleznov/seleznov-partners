@@ -74,6 +74,19 @@ DESCRIPTION = ("Адвокатське бюро «Селезньов і парт
 E = html.escape
 OUT = os.path.dirname(os.path.abspath(__file__))
 
+def mark(gid, size=42):
+    """Знак бюро (варіант А2): ваги з вигнутим коромислом, одна лінія й точка, фірмовий градієнт."""
+    return (f'<svg class="mark" viewBox="0 0 64 64" width="{size}" height="{size}" fill="none" stroke="url(#{gid})" stroke-width="3.8" '
+            f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><defs><linearGradient id="{gid}" x1="0" y1="0" x2="64" y2="0" '
+            f'gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2D48B7"/><stop offset="1" stop-color="#00A2F5"/></linearGradient></defs>'
+            f'<circle cx="32" cy="10.5" r="3.5" fill="url(#{gid})" stroke="none"/><path d="M12 22 Q32 17 52 22 M32 19.5 V55 M24 55 H40"/>'
+            f'<path d="M7 38 L12 22 L17 38 M5 38 Q12 44 19 38 Z"/><path d="M47 38 L52 22 L57 38 M45 38 Q52 44 59 38 Z"/></svg>')
+
+
+def wordmark():
+    return '<span><span class="wm"><b>Селезньов</b><span> і партнери</span></span><small>адвокатське бюро</small></span>'
+
+
 ARROW = '<svg aria-hidden="true" viewBox="0 0 16 16" class="ico"><path d="M2 8H14M9 3L14 8L9 13"/></svg>'
 OUTLINK = '<svg aria-hidden="true" viewBox="0 0 16 16" class="ico"><path d="M4 12L12 4M6 4H12V10"/></svg>'
 
@@ -89,7 +102,9 @@ CSS = """
 @font-face{font-family:Onest;font-style:normal;font-display:swap;font-weight:100 900;src:url(/assets/fonts/onest-latin-wght-normal.woff2) format("woff2-variations");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:Geologica;font-style:normal;font-display:swap;font-weight:100 900;src:url(/assets/fonts/geologica-cyrillic-wght-normal.woff2) format("woff2-variations");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
 @font-face{font-family:Geologica;font-style:normal;font-display:swap;font-weight:100 900;src:url(/assets/fonts/geologica-latin-wght-normal.woff2) format("woff2-variations");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-:root{--sand:#E9DFD2;--paper:#F4EEE6;--ink:#1F1E1C;--muted:#4A433B;--soft:#5C544B;--accent:#2459C9;--sage:#8A9A7B;--slate:#7F93A8;--clay:#D8CBBB;--glass:rgba(255,255,255,.55);--glass-line:rgba(255,255,255,.85);
+@font-face{font-family:Raleway;font-style:normal;font-display:swap;font-weight:100 900;src:url(/assets/fonts/raleway-cyrillic-wght-normal.woff2) format("woff2-variations");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:Raleway;font-style:normal;font-display:swap;font-weight:100 900;src:url(/assets/fonts/raleway-latin-wght-normal.woff2) format("woff2-variations");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{--sand:#E9DFD2;--paper:#F4EEE6;--ink:#1F1E1C;--muted:#4A433B;--soft:#5C544B;--accent:#2D48B7;--sky:#00A2F5;--grad:linear-gradient(90deg,#2D48B7,#00A2F5);--logo:Raleway,Onest,Arial,sans-serif;--sage:#8A9A7B;--slate:#7F93A8;--clay:#D8CBBB;--glass:rgba(255,255,255,.55);--glass-line:rgba(255,255,255,.85);
 --display:Geologica,Onest,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--body:Onest,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--gut:max(20px,env(safe-area-inset-left,0px));color-scheme:light}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -112,11 +127,11 @@ p{margin:0}
 .bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 28px;padding:8px 10px 8px 20px;background:var(--glass);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);border:1px solid var(--glass-line);border-radius:32px}
 .brand{display:flex;align-items:center;gap:14px;min-height:48px}
 .brand:hover{text-decoration:none}
-.mark{position:relative;flex:none;width:44px;height:32px}
-.mark::before{content:"";position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--accent)}
-.mark::after{content:"";position:absolute;left:14px;top:0;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.9)}
-.brand b{display:block;font-family:var(--display);font-size:19px;font-weight:500;line-height:1.15}
-.brand small{display:block;font-size:12px;letter-spacing:.06em;color:var(--soft)}
+.mark{flex:none;width:42px;height:42px}
+.wm{display:block;font-family:var(--logo);font-size:21px;line-height:1.05;letter-spacing:-.2px;white-space:nowrap}
+.wm b{font-weight:700;color:var(--accent)}
+.wm span{font-weight:300;color:var(--sky)}
+.brand small{display:block;font-family:var(--logo);font-size:13px;font-weight:500;color:#1F7FD8;margin-top:2px}
 .nav{display:flex;flex-wrap:wrap;gap:2px 26px;font-size:15px}
 .nav a,.bar .tel{display:inline-flex;align-items:center;min-height:44px}
 .bar .tel{font-size:15px;font-weight:500;font-variant-numeric:tabular-nums}
@@ -134,7 +149,7 @@ p{margin:0}
 .hero-art{flex:2 1 320px;min-width:0;max-width:500px;position:relative;padding:56px 0 28px}
 .orb{position:absolute;border-radius:50%;aspect-ratio:1/1}
 .orb--glass{left:12%;top:0;width:76%;border:1.5px solid var(--glass-line);background:linear-gradient(145deg,rgba(255,255,255,.5),rgba(255,255,255,.06) 58%)}
-.orb--accent{right:0;top:30%;width:58%;background:var(--accent)}
+.orb--accent{right:0;top:30%;width:58%;background:var(--grad)}
 .orb--sage{right:7%;top:5%;width:12%;background:var(--sage)}
 .orb--slate{left:0;bottom:0;width:31%;background:radial-gradient(circle at 35% 30%,#AAB9C9,#72859A 72%)}
 .pick{position:relative;width:min(100%,350px);padding:26px;display:flex;flex-direction:column;gap:16px;background:var(--glass);-webkit-backdrop-filter:blur(26px);backdrop-filter:blur(26px);border:1px solid var(--glass-line);border-radius:36px}
@@ -152,7 +167,7 @@ p{margin:0}
 .fig span{position:relative;font-size:16px;line-height:1.45}
 .fig--glass{background:var(--glass);border:1px solid var(--glass-line)}
 .fig--glass span{color:var(--muted)}
-.fig--accent{background:var(--accent);color:#fff}
+.fig--accent{background:var(--grad);color:#fff}
 .fig--accent::before{content:"";position:absolute;right:-60px;top:-70px;width:230px;height:230px;border-radius:50%;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35)}
 .fig--ink{background:var(--ink);color:var(--paper)}
 .fig--ink span{color:#C9C0B5}
@@ -213,7 +228,7 @@ p{margin:0}
 .reviews nav{display:flex;flex-wrap:wrap;gap:12px}
 .reviews .pill{background:var(--glass);border:1px solid var(--glass-line);font-size:15px;font-weight:500;gap:10px}
 /* contacts */
-.cta{position:relative;overflow:hidden;padding:clamp(28px,5vw,68px);display:flex;flex-direction:column;gap:44px;background:var(--accent);color:#fff;border-radius:44px}
+.cta{position:relative;overflow:hidden;padding:clamp(28px,5vw,68px);display:flex;flex-direction:column;gap:44px;background:var(--grad);color:#fff;border-radius:44px}
 .cta::before{content:"";position:absolute;right:-120px;top:-160px;width:520px;height:520px;border-radius:50%;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.3)}
 .cta>*{position:relative}
 .cta h2{font-weight:300;font-size:clamp(32px,4.2vw,56px);line-height:1.08;letter-spacing:-.02em;max-width:820px}
@@ -223,7 +238,7 @@ p{margin:0}
 .office b{font-family:var(--display);font-weight:400;font-size:26px;line-height:1.15}
 /* footer */
 .foot{padding-top:60px;padding-bottom:calc(64px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;justify-content:space-between;gap:30px 60px;font-size:15px}
-.foot b{display:block;font-family:var(--display);font-size:20px;font-weight:500;line-height:1.15}
+.foot .brand{min-height:0}
 .foot small{display:block;font-size:13px;letter-spacing:.06em;color:var(--soft)}
 .foot nav{display:flex;flex-direction:column}
 .foot nav a{display:inline-flex;align-items:center;min-height:34px}
@@ -294,6 +309,7 @@ def head(title, description, path, noindex=False):
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/onest-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/geologica-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/raleway-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{E(SITE['short'])}">
 <meta property="og:locale" content="uk_UA">
@@ -317,7 +333,7 @@ def head(title, description, path, noindex=False):
 def header():
     return f"""<header class="wrap top">
 <div class="bar">
-<a class="brand" href="/" aria-label="{E(SITE['name'])}, на головну"><span class="mark" aria-hidden="true"></span><span><b>{E(SITE['short'])}</b><small>Адвокатське бюро</small></span></a>
+<a class="brand" href="/" aria-label="{E(SITE['name'])}, на головну">{mark('bm-h')}{wordmark()}</a>
 <nav class="nav" aria-label="Розділи сторінки"><a href="/#services">Сервіси</a><a href="/#about">Про бюро</a><a href="/#contacts">Контакти</a></nav>
 <div class="bar-act"><a class="tel" href="tel:{SITE['phone_raw']}">{SITE['phone']}</a><a class="btn" href="{SITE['telegram']}">Написати адвокату</a></div>
 </div>
@@ -328,7 +344,7 @@ def header():
 def footer():
     links = "".join(f'<a href="{s["url"]}">{E(s["title"])}</a>' for s in SERVICES)
     return f"""<footer class="wrap foot">
-<div><b>{E(SITE['short'])}</b><small>Адвокатське бюро</small></div>
+<a class="brand" href="/" aria-label="{E(SITE['name'])}, на головну">{mark('bm-f', 38)}{wordmark()}</a>
 <nav aria-label="Сервіси бюро">{links}</nav>
 <div class="legal"><span>Свідоцтво адвоката № {SITE['cert']}</span><span>{E(SITE['street'])}, м. {E(SITE['city'])}, {SITE['postal']}</span><span>© {SITE['since']}–2026 АБ «{E(SITE['short'])}»</span></div>
 </footer>
